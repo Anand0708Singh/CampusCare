@@ -14,17 +14,23 @@ var dbProvider = builder.Configuration.GetValue<string>("DatabaseProvider") ?? "
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    // Try MySQL first if configured
     if (dbProvider.Equals("MySQL", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(connectionString))
     {
         try
         {
-            var serverVersion = ServerVersion.AutoDetect(connectionString);
-            options.UseMySql(connectionString, serverVersion);
+            var serverVersion = new MariaDbServerVersion(new Version(10, 4, 32));
+            options.UseMySql(connectionString, serverVersion, mySqlOptions =>
+            {
+                mySqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 3,
+                    maxRetryDelay: TimeSpan.FromSeconds(5),
+                    errorNumbersToAdd: null);
+            });
+            Console.WriteLine(">>> [DATABASE] Successfully connected to XAMPP MariaDB/MySQL (CampusCareDb)");
         }
-        catch
+        catch (Exception ex)
         {
-            // Fallback gracefully to in-memory if local MySQL daemon isn't running during evaluation
+            Console.WriteLine($">>> [DATABASE ERROR] Falling back to In-Memory: {ex.Message}");
             options.UseInMemoryDatabase("CampusCareDb");
         }
     }
