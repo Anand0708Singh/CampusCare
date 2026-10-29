@@ -1,0 +1,47 @@
+# ==============================================================================
+# .gitignore for CampusCare (.NET 10 ASP.NET Core MVC + Technical Poster)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. .NET & Visual Studio Build Artifacts (Do NOT commit binaries/caches)
+# ------------------------------------------------------------------------------
+**/bin/
+**/obj/
+**/build_out/
+*.exe
+*.dll
+*.pdb
+*.deps.json
+*.runtimeconfig.json
+*.staticwebassets.endpoints.json
+*.staticwebassets.runtime.json
+
+# Visual Studio / Rider / VS Code cache files
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ------------------------------------------------------------------------------
+# 2. Posters & Graphics: Only upload the ONE finalized A2 PDF poster
+# ------------------------------------------------------------------------------
+# Ignore duplicate PDF copies and temporary layout checks
+poster/CampusCare_A2_Poster.pdf
+poster/check_layout*.png
+*_debug.png
+
+# Ensure the finalized primary A2 poster is committed
+!poster/CampusCare - A2 Project Poster.pdf
+
+# ------------------------------------------------------------------------------
+# 3. OS & Editor Generated Files
+# ------------------------------------------------------------------------------
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+*.log
+

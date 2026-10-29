@@ -1,0 +1,109 @@
+@model CampusCare.Models.Complaint
+@{
+    ViewData["Title"] = "Lodge New Grievance";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-header bg-navy text-white p-4" style="background: linear-gradient(135deg, #0b192c 0%, #1e3a8a 100%);">
+                <div class="d-flex align-items-center">
+                    <div class="p-3 bg-white bg-opacity-10 rounded-3 me-3">
+                        <i class="bi bi-pencil-fill fs-3 text-info"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-1 text-white">Lodge Campus Maintenance Complaint</h4>
+                        <p class="mb-0 text-white-50 small">Fill out the details below. Our technical team is dispatched according to urgency level.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+                <!-- FORM HANDLING (TAG HELPERS & MODEL VALIDATION) -->
+                <form asp-action="Create" method="post" id="complaintForm">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
+
+                    <!-- Issue Title -->
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label fw-bold"></label>
+                        <input asp-for="Title" class="form-control" placeholder="e.g., Projector HDMI Port Damaged or Lab AC Leaking Water" />
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <!-- Category Dropdown -->
+                        <div class="col-md-6">
+                            <label asp-for="CategoryId" class="form-label fw-bold"></label>
+                            <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories">
+                                <option value="">-- Select Category --</option>
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Priority -->
+                        <div class="col-md-6">
+                            <label asp-for="Priority" class="form-label fw-bold"></label>
+                            <select asp-for="Priority" class="form-select" asp-items="Html.GetEnumSelectList<CampusCare.Models.ComplaintPriority>()"></select>
+                            <span asp-validation-for="Priority" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Location / Room -->
+                    <div class="mb-3">
+                        <label asp-for="Location" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                            <input asp-for="Location" class="form-control" placeholder="e.g., Computer Lab 302, Library 1st Floor, Boys Hostel 3 Room 12" />
+                        </div>
+                        <span asp-validation-for="Location" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-bold"></label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Describe the fault or breakdown in detail so technicians can bring the right tools..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <h5 class="fw-bold border-bottom pb-2 mb-3 text-secondary">
+                        <i class="bi bi-person-lines-fill me-1"></i> Reporter Contact Details
+                    </h5>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label asp-for="ReporterName" class="form-label fw-semibold"></label>
+                            <input asp-for="ReporterName" class="form-control" placeholder="Your Full Name" />
+                            <span asp-validation-for="ReporterName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-5">
+                            <label asp-for="ReporterEmail" class="form-label fw-semibold"></label>
+                            <input asp-for="ReporterEmail" type="email" class="form-control" placeholder="student@campus.edu" />
+                            <span asp-validation-for="ReporterEmail" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="ReporterPhone" class="form-label fw-semibold"></label>
+                            <input asp-for="ReporterPhone" class="form-control" placeholder="9876543210" />
+                            <span asp-validation-for="ReporterPhone" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 py-2 fw-semibold shadow-sm">
+                            <i class="bi bi-send-fill me-1"></i> Submit Complaint
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

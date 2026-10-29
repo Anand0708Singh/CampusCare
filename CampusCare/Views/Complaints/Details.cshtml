@@ -1,0 +1,124 @@
+@model CampusCare.Models.Complaint
+@{
+    ViewData["Title"] = "Ticket Details #" + Model.Id;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+            <div class="card-header bg-navy text-white p-4" style="background: linear-gradient(135deg, #0b192c 0%, #1e3a8a 100%);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="badge bg-info text-dark mb-2">Ticket #@Model.Id</span>
+                        <h3 class="mb-0 text-white">@Model.Title</h3>
+                    </div>
+                    <div>
+                        @switch (Model.Status)
+                        {
+                            case CampusCare.Models.ComplaintStatus.Open:
+                                <span class="badge bg-danger fs-6 px-3 py-2 rounded-pill">Open</span>
+                                break;
+                            case CampusCare.Models.ComplaintStatus.InProgress:
+                                <span class="badge bg-warning text-dark fs-6 px-3 py-2 rounded-pill">In Progress</span>
+                                break;
+                            case CampusCare.Models.ComplaintStatus.Resolved:
+                                <span class="badge bg-success fs-6 px-3 py-2 rounded-pill">Resolved</span>
+                                break;
+                            default:
+                                <span class="badge bg-dark fs-6 px-3 py-2 rounded-pill">Closed</span>
+                                break;
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <span class="text-muted small d-block mb-1">CATEGORY & DEPARTMENT</span>
+                            <span class="fw-bold text-dark fs-5">
+                                <i class="bi @Model.Category?.IconClass text-primary me-2"></i>
+                                @Model.Category?.Name
+                            </span>
+                            <div class="small text-secondary mt-1">@Model.Category?.Department</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <span class="text-muted small d-block mb-1">LOCATION & ROOM</span>
+                            <span class="fw-bold text-dark fs-5">
+                                <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+                                @Model.Location
+                            </span>
+                            <div class="small text-secondary mt-1">Priority: <strong class="text-uppercase">@Model.Priority</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="fw-bold text-navy mb-2">Description of Breakdown</h5>
+                    <div class="p-3 bg-white border rounded-3 text-secondary lh-base">
+                        @Model.Description
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-secondary mb-2">Reporter Information</h6>
+                        <ul class="list-group list-group-flush border rounded-3">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">Name</span>
+                                <span class="fw-medium">@Model.ReporterName</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">Email</span>
+                                <span class="fw-medium">@Model.ReporterEmail</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">Phone</span>
+                                <span class="fw-medium">@(Model.ReporterPhone ?? "Not Provided")</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">Reported On</span>
+                                <span class="fw-medium">@Model.CreatedAt.ToString("f")</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-secondary mb-2">Maintenance Action & Status</h6>
+                        <ul class="list-group list-group-flush border rounded-3">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">Technician</span>
+                                <span class="fw-bold text-primary">@(Model.AssignedTechnician ?? "Awaiting Assignment")</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">Last Updated</span>
+                                <span class="fw-medium">@(Model.UpdatedAt?.ToString("g") ?? "No updates yet")</span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="text-muted d-block mb-1">Technician Remarks:</span>
+                                <span class="small fst-italic">@(Model.AdminRemarks ?? "No remarks added yet.")</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                        <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+                    </a>
+                    <div class="d-flex gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary px-4">
+                            <i class="bi bi-pencil-square me-1"></i> Update Status
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger px-3">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

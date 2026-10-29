@@ -1,0 +1,68 @@
+@model IEnumerable<CampusCare.Models.Complaint>
+@{
+    ViewData["Title"] = "Maintenance SLA Analytics";
+
+    var total = Model.Count();
+    var open = Model.Count(c => c.Status == CampusCare.Models.ComplaintStatus.Open);
+    var inProgress = Model.Count(c => c.Status == CampusCare.Models.ComplaintStatus.InProgress);
+    var resolved = Model.Count(c => c.Status == CampusCare.Models.ComplaintStatus.Resolved);
+    var closed = Model.Count(c => c.Status == CampusCare.Models.ComplaintStatus.Closed);
+
+    var resolutionRate = total > 0 ? (int)((double)(resolved + closed) / total * 100) : 0;
+
+    var byCategory = Model.GroupBy(c => c.Category?.Name ?? "Unassigned")
+                          .Select(g => new { Name = g.Key, Count = g.Count() })
+                          .OrderByDescending(x => x.Count)
+                          .ToList();
+}
+
+<div class="row align-items-center mb-4">
+    <div class="col-md-8">
+        <h2 class="fw-bold mb-1 text-navy">Facility Performance & SLA Analytics</h2>
+        <p class="text-muted mb-0">High-level operational metrics on campus resolution rates and breakdown hotspots.</p>
+    </div>
+    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <a asp-action="Index" class="btn btn-outline-primary px-3 rounded-pill">
+            <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Resolution Rate Gauge -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100 p-4 text-center">
+            <span class="text-muted small fw-bold text-uppercase mb-2">Overall Resolution Rate</span>
+            <div class="my-3">
+                <div class="display-3 fw-bold text-success">@resolutionRate%</div>
+                <span class="text-muted small">@resolved of @total complaints resolved</span>
+            </div>
+            <div class="progress" style="height: 12px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: @resolutionRate%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department Distribution -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
+            <h5 class="fw-bold text-navy mb-3">Complaints Breakdown by Facility Category</h5>
+            <div class="d-flex flex-column gap-3">
+                @foreach (var cat in byCategory)
+                {
+                    var percent = total > 0 ? (int)((double)cat.Count / total * 100) : 0;
+                    <div>
+                        <div class="d-flex justify-content-between small fw-bold mb-1">
+                            <span>@cat.Name</span>
+                            <span>@cat.Count tickets (@percent%)</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-primary" style="width: @percent%;"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
