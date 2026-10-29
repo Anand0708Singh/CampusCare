@@ -7,37 +7,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // -------------------------------------------------------------
-// Database Configuration: MySQL with EF Core (+ In-Memory Fallback)
+// Database Configuration: MySQL with EF Core
 // -------------------------------------------------------------
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var dbProvider = builder.Configuration.GetValue<string>("DatabaseProvider") ?? "MySQL";
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? "Server=127.0.0.1;Port=3306;Database=CampusCareDb;User=root;Password=;";
+
+var serverVersion = new MariaDbServerVersion(new Version(10, 4, 32));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    if (dbProvider.Equals("MySQL", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(connectionString))
+    options.UseMySql(connectionString, serverVersion, mySqlOptions =>
     {
-        try
-        {
-            var serverVersion = new MariaDbServerVersion(new Version(10, 4, 32));
-            options.UseMySql(connectionString, serverVersion, mySqlOptions =>
-            {
-                mySqlOptions.EnableRetryOnFailure(
-                    maxRetryCount: 3,
-                    maxRetryDelay: TimeSpan.FromSeconds(5),
-                    errorNumbersToAdd: null);
-            });
-            Console.WriteLine(">>> [DATABASE] Successfully connected to XAMPP MariaDB/MySQL (CampusCareDb)");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($">>> [DATABASE ERROR] Falling back to In-Memory: {ex.Message}");
-            options.UseInMemoryDatabase("CampusCareDb");
-        }
-    }
-    else
-    {
-        options.UseInMemoryDatabase("CampusCareDb");
-    }
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 3,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorNumbersToAdd: null);
+    });
 });
 
 // -------------------------------------------------------------
