@@ -3,6 +3,7 @@ USE CampusCareDb;
 CREATE TABLE IF NOT EXISTS Categories (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(100) NOT NULL,
+    Department VARCHAR(80) NOT NULL DEFAULT 'General',
     Description VARCHAR(300) NOT NULL,
     DepartmentCode VARCHAR(20) NOT NULL,
     IconClass VARCHAR(50) NOT NULL
