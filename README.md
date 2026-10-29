@@ -83,8 +83,6 @@ Open your browser and navigate to:
 The repository includes the finalized technical presentation poster designed to exact **A2 portrait dimensions (420 × 594 mm)**:
 - **Vector PDF:** [`poster/CampusCare - A2 Project Poster.pdf`](poster/CampusCare%20-%20A2%20Project%20Poster.pdf)
 - **High-Res Visual Preview:** [`poster/CampusCare_A2_Poster_Preview.png`](poster/CampusCare_A2_Poster_Preview.png)
-- **Web Source & One-Click Print Utility:** [`poster/index.html`](poster/index.html)
-- **Automated Generation Script:** [`poster/generate_poster_pdf.py`](poster/generate_poster_pdf.py)
 
 ---
 
@@ -100,11 +98,9 @@ The repository includes the finalized technical presentation poster designed to 
 │   ├── appsettings.json           # MySQL connection configurations
 │   ├── CampusCare_Seed.sql        # Standalone MySQL schema and seed data
 │   └── Program.cs                 # Middleware, DI, EF Core & Session setup
-├── poster/                        # A2 Technical Presentation Poster
+├── poster/                        # A2 Technical Presentation Poster Deliverables
 │   ├── CampusCare - A2 Project Poster.pdf  # Finalized print-ready vector PDF
 │   ├── CampusCare_A2_Poster_Preview.png    # High-resolution visual render
-│   ├── index.html                 # Interactive web preview & print interface
-│   ├── generate_poster_pdf.py     # Python ReportLab vector PDF generator
 │   ├── utu logo.jpg               # Institutional Logo (Left)
 │   └── amtics logo.png            # Institutional Logo (Right)
 ├── .gitignore                     # Optimized exclusion rules

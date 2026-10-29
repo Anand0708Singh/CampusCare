@@ -27,9 +27,11 @@
 # ------------------------------------------------------------------------------
 # 2. Posters & Graphics: Only upload the ONE finalized A2 PDF poster
 # ------------------------------------------------------------------------------
-# Ignore duplicate PDF copies and temporary layout checks
+# Ignore duplicate PDF copies, scripts, web templates and temporary layout checks
 poster/CampusCare_A2_Poster.pdf
 poster/check_layout*.png
+poster/index.html
+poster/generate_poster_pdf.py
 *_debug.png
 
 # Ensure the finalized primary A2 poster is committed
